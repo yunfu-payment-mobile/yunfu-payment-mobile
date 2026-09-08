@@ -144,19 +144,19 @@ async def login_page():
 async def register_api(request: Request):
     try:
         data = await request.json()
-    
-@app.post("/api/注册")
-async def register_api(request: Request):
-    try:
-        data = await request.json()
+
+        phone = str(data.get("phone", "")).strip()
+        code = str(data.get("code", "")).strip()
+        password = str(data.get("password", ""))
+        confirm_password = str(data.get("confirm_password", ""))
+
+        # 后面的注册逻辑继续保持
+
     except json.JSONDecodeError:
-        return JSONResponse({"success": False, "message": "请求数据格式错误"}, status_code=400)
-
-    phone = str(data.get("phone", "")).strip()
-    code = str(data.get("code", "")).strip()
-    password = str(data.get("password", ""))
-    confirm_password = str(data.get("confirm_password", ""))
-
+        return JSONResponse({
+            "success": False,
+            "message": "数据格式错误"
+        })
     if not validate_phone(phone):
         return JSONResponse({"success": False, "message": "请输入正确的11位手机号码"}, status_code=400)
 
