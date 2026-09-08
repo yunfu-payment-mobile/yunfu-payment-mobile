@@ -221,7 +221,7 @@ async def login_api(request: Request):
         return JSONResponse({
             "success": False,
             "message": "账号或密码错误"
-    })
+        })
 
 request.session.clear()
 request.session["merchant_id"] = merchant["id"]
