@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>商户注册</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F3F8FE;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#172338}
+.page{min-height:100vh;padding:24px}
+.card{width:100%;max-width:420px;margin:40px auto;background:#FFF;border:1px solid #DCE8F4;border-radius:26px;padding:30px 26px}
+.back{color:#2F6FED;text-decoration:none;font-size:15px}
+h1{font-size:28px;margin:30px 0 8px}
+.sub{color:#738196;font-size:14px;margin-bottom:28px}
+label{display:block;margin:17px 0 8px;font-size:14px;font-weight:700}
+input{width:100%;height:52px;border:1px solid #DCE7F2;border-radius:12px;padding:0 15px;font-size:15px;outline:none}
+input:focus{border-color:#2F6FED}
+button{width:100%;height:54px;border:0;border-radius:14px;background:#2F6FED;color:#FFF;font-size:17px;font-weight:700;margin-top:26px;cursor:pointer}
+button:disabled{opacity:.65;cursor:not-allowed}
+.login{text-align:center;display:block;margin-top:18px;color:#2F6FED;text-decoration:none;font-size:14px}
+.hint{margin-top:12px;color:#8A6D1D;background:#FFF8E6;border:1px solid #F1D98A;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.5}
+.message{display:none;margin-top:16px;border-radius:10px;padding:11px 12px;font-size:14px;line-height:1.5}
+.message.error{display:block;color:#A12622;background:#FFF1F0;border:1px solid #F3C6C3}
+.message.success{display:block;color:#176B3A;background:#EEF9F2;border:1px solid #BFE4CC}
+</style>
+</head>
+
+<body>
+<div class="page">
+<div class="card">
+<a class="back" href="/">‹ 返回</a>
+<h1>商户注册</h1>
+<div class="sub">创建云付商户账号</div>
+
+<form id="registerForm">
+<label for="phone">手机号码</label>
+<input id="phone" name="phone" type="tel" inputmode="numeric" maxlength="11" autocomplete="tel" placeholder="请输入手机号码" required>
+
+<label for="code">短信验证码</label>
+<input id="code" name="code" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="请输入验证码" required>
+<div class="hint">当前为本地测试环境，验证码暂固定为：123456。正式上线时再接入真实短信服务。</div>
+
+<label for="password">登录密码</label>
+<input id="password" name="password" type="password" minlength="6" maxlength="72" autocomplete="new-password" placeholder="请输入登录密码" required>
+
+<label for="confirm_password">确认密码</label>
+<input id="confirm_password" name="confirm_password" type="password" minlength="6" maxlength="72" autocomplete="new-password" placeholder="请再次输入密码" required>
+
+<div id="message" class="message"></div>
+<button id="submitButton" type="submit">创建账号</button>
+</form>
+
+<a class="login" href="/登录">已有账号？返回登录</a>
+</div>
+</div>
+
+<script>
+const form = document.getElementById('registerForm');
+const button = document.getElementById('submitButton');
+const message = document.getElementById('message');
+
+function showMessage(text, type) {
+    message.textContent = text;
+    message.className = 'message ' + type;
+}
+
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    button.disabled = true;
+    button.textContent = '正在创建…';
+    message.className = 'message';
+
+    const payload = {
+        phone: document.getElementById('phone').value.trim(),
+        code: document.getElementById('code').value.trim(),
+        password: document.getElementById('password').value,
+        confirm_password: document.getElementById('confirm_password').value
+    };
+
+    try {
+        const response = await fetch('/api/注册', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            showMessage(data.message || '注册失败，请稍后重试', 'error');
+            return;
+        }
+
+        showMessage('注册成功，正在进入登录页面…', 'success');
+        setTimeout(() => {
+            window.location.href = data.redirect || '/登录';
+        }, 500);
+    } catch (error) {
+        showMessage('无法连接服务器，请确认后端已经启动。', 'error');
+    } finally {
+        button.disabled = false;
+        button.textContent = '创建账号';
+    }
+});
+</script>
+</body>
+</html>
