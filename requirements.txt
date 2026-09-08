@@ -1,7 +1,2 @@
 fastapi
-uvicorn
-jinja2
-python-multipart
-sqlalchemy
-passlib
-bcrypt
+uvicorn[standard]
