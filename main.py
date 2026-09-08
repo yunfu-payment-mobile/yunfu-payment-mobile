@@ -30,7 +30,7 @@ app.add_middleware(
     session_cookie="yunfu_session",
     max_age=60 * 60 * 24 * 7,
     same_site="lax",
-    https_only=False,  # 本地 HTTP 测试保持 False；正式 HTTPS 部署应改为 True
+    https_only=True,
 )
 
 
