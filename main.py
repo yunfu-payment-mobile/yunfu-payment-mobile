@@ -218,9 +218,9 @@ async def login_api(request: Request):
         ).fetchone()
 
     if merchant is None or not verify_password(password, merchant["password_hash"]):
-    return JSONResponse({
-        "success": False,
-        "message": "账号或密码错误"
+        return JSONResponse({
+            "success": False,
+            "message": "账号或密码错误"
     })
 
 request.session.clear()
