@@ -126,10 +126,19 @@ def startup() -> None:
 
 
 @app.get("/", response_class=HTMLResponse)
-async def home():
+async def home(request: Request):
+
+    print("SESSION:", request.session)
+
+    phone = request.session.get("phone")
+
+    if not phone:
+        return RedirectResponse(
+            url="/登录",
+            status_code=303
+        )
+
     return read_page("index.html")
-
-
 @app.get("/注册", response_class=HTMLResponse)
 async def register_page():
     return read_page("注册.html")
