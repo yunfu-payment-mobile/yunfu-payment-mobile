@@ -131,21 +131,8 @@ async def home():
 
 
 @app.get("/注册", response_class=HTMLResponse)
-async def home(request: Request):
-
-    phone = request.session.get("phone")
-
-    if not phone:
-
-        return RedirectResponse(
-
-            url="/登录",
-
-            status_code=303
-
-        )
-
-    return read_page("index.html")
+async def register_page():
+    return read_page("注册.html")
 
 
 @app.get("/登录", response_class=HTMLResponse)
@@ -153,6 +140,9 @@ async def login_page():
     return read_page("登录.html")
 
 
+@app.post("/api/注册")
+async def register_api(request: Request):
+    
 @app.post("/api/注册")
 async def register_api(request: Request):
     try:
