@@ -126,7 +126,15 @@ def startup() -> None:
 
 
 @app.get("/", response_class=HTMLResponse)
-async def home():
+async def home(request: Request):
+    phone = request.session.get("phone")
+
+    if not phone:
+        return RedirectResponse(
+            url="/登录",
+            status_code=303
+        )
+
     return read_page("index.html")
 
 
