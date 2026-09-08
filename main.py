@@ -198,23 +198,24 @@ async def login_api(request: Request):
     try:
         data = await request.json()
     except json.JSONDecodeError:
-        return JSONResponse({"success": False, "message": "请求数据格式错误"}, status_code=400)
+        return JSONResponse({
+            "success": False,
+            "message": "数据错误"
+        })
 
     phone = str(data.get("phone", "")).strip()
     password = str(data.get("password", ""))
-    next_url = str(data.get("next", "/")).strip() or "/"
-
-    # 防止使用外部地址进行开放重定向。
-    if not next_url.startswith("/") or next_url.startswith("//"):
-        next_url = "/"
 
     if not validate_phone(phone):
-        return JSONResponse({"success": False, "message": "请输入正确的手机号"}, status_code=400)
+        return JSONResponse({
+            "success": False,
+            "message": "手机号错误"
+        })
 
     with get_db() as conn:
         merchant = conn.execute(
-            "SELECT id, phone, password_hash FROM merchants WHERE phone = ?",
-            (phone,),
+            "SELECT id, phone, password_hash FROM merchants WHERE phone=?",
+            (phone,)
         ).fetchone()
 
     if merchant is None or not verify_password(password, merchant["password_hash"]):
@@ -223,14 +224,13 @@ async def login_api(request: Request):
             "message": "账号或密码错误"
         })
 
-request.session.clear()
-request.session["merchant_id"] = merchant["id"]
-request.session["phone"] = merchant["phone"]
+    request.session["merchant_id"] = merchant["id"]
+    request.session["phone"] = merchant["phone"]
 
-return JSONResponse({
-    "success": True,
-    "redirect": "/"
-})
+    return JSONResponse({
+        "success": True,
+        "redirect": "/"
+    })
 
 @app.post("/api/退出")
 async def logout_api(request: Request):
