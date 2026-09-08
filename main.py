@@ -223,20 +223,14 @@ async def login_api(request: Request):
         "message": "账号或密码错误"
     })
 
-
-request.session["phone"] = phone
+request.session.clear()
+request.session["merchant_id"] = merchant["id"]
+request.session["phone"] = merchant["phone"]
 
 return JSONResponse({
     "success": True,
     "redirect": "/"
 })
-
-    request.session.clear()
-    request.session["merchant_id"] = merchant["id"]
-    request.session["phone"] = merchant["phone"]
-
-    return JSONResponse({"success": True, "message": "登录成功", "redirect": next_url})
-
 
 @app.post("/api/退出")
 async def logout_api(request: Request):
