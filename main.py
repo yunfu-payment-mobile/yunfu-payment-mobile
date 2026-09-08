@@ -142,6 +142,8 @@ async def login_page():
 
 @app.post("/api/注册")
 async def register_api(request: Request):
+    try:
+        data = await request.json()
     
 @app.post("/api/注册")
 async def register_api(request: Request):
