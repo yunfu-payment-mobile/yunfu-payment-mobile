@@ -221,7 +221,7 @@ async def login_api(request: Request):
 
     return JSONResponse({
         "success": True,
-        "redirect": "/"
+        "redirect": "/",
     })
 
 @app.post("/api/退出")
