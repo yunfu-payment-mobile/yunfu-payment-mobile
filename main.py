@@ -210,7 +210,18 @@ async def login_api(request: Request):
         ).fetchone()
 
     if merchant is None or not verify_password(password, merchant["password_hash"]):
-        return JSONResponse({"success": False, "message": "手机号或密码错误"}, status_code=401)
+    return JSONResponse({
+        "success": False,
+        "message": "账号或密码错误"
+    })
+
+
+request.session["phone"] = phone
+
+return JSONResponse({
+    "success": True,
+    "redirect": "/"
+})
 
     request.session.clear()
     request.session["merchant_id"] = merchant["id"]
