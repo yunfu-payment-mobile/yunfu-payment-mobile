@@ -22,7 +22,7 @@ DB_PATH = BASE_DIR / "yunfu.db"
 # 本地测试默认验证码。部署正式环境时请通过环境变量 REGISTRATION_CODE 设置，
 # 并接入真实短信服务，不要继续使用固定验证码。
 REGISTRATION_CODE = os.getenv("REGISTRATION_CODE", "123456")
-SESSION_SECRET = os.getenv("SESSION_SECRET", "yunfu-local-development-secret-change-me")
+SESSION_SECRET = "yunfu-2026-production-secret-key-987654"
 
 app.add_middleware(
     SessionMiddleware,
@@ -227,8 +227,9 @@ async def login_api(request: Request):
 
     request.session["merchant_id"] = merchant["id"]
     request.session["phone"] = merchant["phone"]
-    print(request.session)
-
+    
+    print("LOGIN SESSION:", request.session)
+    
     return JSONResponse({
         "success": True,
         "redirect": "/",
