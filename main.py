@@ -218,6 +218,7 @@ async def login_api(request: Request):
 
     request.session["merchant_id"] = merchant["id"]
     request.session["phone"] = merchant["phone"]
+    print(request.session)
 
     return JSONResponse({
         "success": True,
