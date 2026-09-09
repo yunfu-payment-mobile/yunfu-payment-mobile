@@ -232,7 +232,7 @@ async def login_api(request: Request):
 
     return JSONResponse({
         "success": True,
-        "redirect": "/"
+        "redirect": "/收款中心"
     })
 @app.post("/api/退出")
 async def logout_api(request: Request):
