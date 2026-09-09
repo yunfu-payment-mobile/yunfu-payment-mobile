@@ -30,7 +30,7 @@ app.add_middleware(
     session_cookie="yunfu_session",
     max_age=60 * 60 * 24 * 7,
     same_site="none",
-    https_only=True,
+    https_only=False,
 )
 
 
