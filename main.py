@@ -29,7 +29,7 @@ app.add_middleware(
     secret_key=SESSION_SECRET,
     session_cookie="yunfu_session",
     max_age=60 * 60 * 24 * 7,
-    same_site="none",
+    same_site="lex",
     https_only=False,
 )
 
@@ -226,14 +226,14 @@ async def login_api(request: Request):
         })
 
     request.session["merchant_id"] = merchant["id"]
-    request.session["phone"] = merchant["phone"]
+request.session["phone"] = merchant["phone"]
 
-    print("LOGIN SESSION:", request.session)
+print("LOGIN SESSION:", request.session)
 
-    return JSONResponse({
-        "success": True,
-        "redirect": "/收款中心"
-    })
+return JSONResponse({
+    "success": True,
+    "redirect": "/收款中心"
+})
 @app.post("/api/退出")
 async def logout_api(request: Request):
     request.session.clear()
