@@ -115,8 +115,13 @@ def read_page(filename: str) -> str:
 
 def require_login(request: Request):
     phone = request.session.get("phone")
+
     if not phone:
-        return RedirectResponse(url="/登录?next=/", status_code=303)
+        return RedirectResponse(
+            url="/登录",
+            status_code=303
+        )
+
     return phone
 
 
