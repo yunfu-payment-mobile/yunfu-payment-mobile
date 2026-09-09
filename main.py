@@ -225,15 +225,15 @@ async def login_api(request: Request):
             "message": "账号或密码错误"
         })
 
-request.session["merchant_id"] = merchant["id"]
-request.session["phone"] = merchant["phone"]
+    request.session["merchant_id"] = merchant["id"]
+    request.session["phone"] = merchant["phone"]
 
-print("LOGIN SESSION:", request.session)
+    print("LOGIN SESSION:", request.session)
 
-return JSONResponse({
-    "success": True,
-    "redirect": "/"
-})
+    return JSONResponse({
+        "success": True,
+        "redirect": "/"
+    })
 @app.post("/api/退出")
 async def logout_api(request: Request):
     request.session.clear()
